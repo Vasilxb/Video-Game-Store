@@ -89,10 +89,38 @@ data class Email(val value: String) {
 }
 
 @Embeddable
+data class Password(val value: String) {
+    protected constructor() : this("")
+
+    init {
+        require(value.isNotEmpty()) { "Password must be at least 8 characters long, include  one uppercase and lowercase letter, one digit and one symbol" }
+        require(value.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z0-9]).{8,}$".toRegex())) {
+            "Password must be at least 8 characters long, include  one uppercase and lowercase letter, one digit and one symbol: $value"
+        }
+    }
+
+    override fun toString(): String {
+        return value
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as video.game.store.user.model.common.Password
+
+        return value == other.value
+    }
+
+    override fun hashCode(): Int {
+        return value.hashCode()
+    }
+}
+@Embeddable
 data class FullName(val value: String) {
     protected constructor() : this("")
     init {
-        require(value.isNotEmpty()) { "Full name cannot be empty." }
+        require(value.isNotEmpty()) { "Please provide your full name" }
         require(value.matches("^[A-Za-z]+([ '-][A-Za-z]+)*\\s+[A-Za-z]+([ '-][A-Za-z]+)*$".toRegex())) {
             "Invalid full name: $value"
         }
@@ -151,7 +179,7 @@ data class Age(val value: Int) {
     protected constructor() : this(0)
 
     init {
-        require(value in 18..100) { "Age must be between 18 and 100." }
+        require(value in 14..100) { "You must be 14 years old for access" }
     }
 
     override fun toString(): String {

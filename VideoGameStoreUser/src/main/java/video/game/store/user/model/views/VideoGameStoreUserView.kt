@@ -29,21 +29,27 @@ data class VideoGameStoreUserView(
     val id: VideoGameStoreUserId,
 
     @Embedded
+    @AttributeOverride(name = "value", column = Column(name = "email"))
     val email: Email,
 
     @Embedded
+    @AttributeOverride(name = "value", column = Column(name = "password"))
     val password: Password,
 
     @Embedded
+    @AttributeOverride(name = "value", column = Column(name = "full_name"))
     val fullName: FullName,
 
     @Embedded
+    @AttributeOverride(name = "value", column = Column(name = "shipping_address"))
     val shippingAddress: ShippingAddress,
 
     @Embedded
+    @AttributeOverride(name = "value", column = Column(name = "age"))
     val age: Age,
 
     @Embedded
+    @AttributeOverride(name = "value", column = Column(name = "gender"))
     val gender: Gender,
 
     @Enumerated(EnumType.STRING)

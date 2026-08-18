@@ -5,13 +5,13 @@ import com.vgs.ordermanagement.model.common.UserId
 import com.vgs.ordermanagement.model.common.VideoGameId
 import com.vgs.ordermanagement.model.exceptions.OrderNotFoundException
 import com.vgs.ordermanagement.model.views.OrderView
-import com.vgs.ordermanagement.repositories.OrderViewJpaRepository
+import com.vgs.ordermanagement.repositories.OrderRepository
 import com.vgs.ordermanagement.services.OrderViewReadService
 import org.springframework.stereotype.Service
 
 @Service
 class OrderViewReadServiceImpl (
-    val orderViewJpaRepository: OrderViewJpaRepository
+    val orderViewJpaRepository: OrderRepository
 ) : OrderViewReadService {
     override fun findById(id: OrderId): OrderView {
         return orderViewJpaRepository

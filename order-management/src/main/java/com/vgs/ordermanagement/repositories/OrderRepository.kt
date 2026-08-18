@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface OrderViewJpaRepository : JpaRepository<OrderView, OrderId>{
+interface OrderRepository : JpaRepository<OrderView, OrderId>{
     fun findAllByUserId(userId: UserId): List<OrderView>
     fun findAllByVideoGameId(videoGameId: VideoGameId): List<OrderView>
     fun findAllByUserIdAndVideoGameId(userId: UserId, videoGameId: VideoGameId): List<OrderView>

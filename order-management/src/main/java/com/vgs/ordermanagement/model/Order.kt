@@ -8,7 +8,10 @@ import com.vgs.ordermanagement.model.common.UserId
 import com.vgs.ordermanagement.model.common.VideoGameId
 import com.vgs.ordermanagement.model.enums.OrderStatus
 import com.vgs.ordermanagement.model.events.OrderCreatedEvent
+import com.vgs.ordermanagement.model.events.OrderDeletedEvent
 import com.vgs.ordermanagement.model.events.OrderStatusUpdatedEvent
+import com.vgs.ordermanagement.model.exceptions.VideoGameNotAvailableException
+import com.vgs.ordermanagement.repositories.CatalogRepository
 import jakarta.persistence.AttributeOverride
 import jakarta.persistence.Column
 import jakarta.persistence.Embedded
@@ -49,7 +52,9 @@ class Order : LabeledEntity {
 
 
     @CommandHandler
-    constructor(command: CreateOrderCommand) {
+    constructor(
+        command: CreateOrderCommand,
+    ) {
         val event = OrderCreatedEvent(
             id = command.id,
             updatedAt = command.updatedAt,
@@ -84,6 +89,19 @@ class Order : LabeledEntity {
 
     fun on(event: OrderStatusUpdatedEvent) {
         this.status = event.status
+    }
+
+    @CommandHandler
+    fun handle(command: DeleteOrderCommand) {
+        val event = OrderDeletedEvent(
+            id = command.id,
+        )
+        this.on(event)
+        AggregateLifecycle.apply(event)
+    }
+
+    fun on(event: OrderDeletedEvent) {
+        AggregateLifecycle.markDeleted()
     }
 
     override fun getId(): Identifier<out Any> {

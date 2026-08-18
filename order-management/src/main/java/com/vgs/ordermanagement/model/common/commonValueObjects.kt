@@ -103,6 +103,9 @@ data class Money(@Column(name = "amount") val amount: BigDecimal, val currency: 
     override fun hashCode(): Int {
         return amount.hashCode()
     }
-
 }
 
+@Embeddable
+data class VideoGameTitle(
+    val value: String
+)

@@ -39,7 +39,7 @@ class OrderCommandDispatcher (
                 .updateStatus(
                     UpdateStatusCommand(
                         status = commandDto.status,
-                        orderId = commandDto.orderId,
+                        id = commandDto.orderId,
                     )
                 ).get()
         )

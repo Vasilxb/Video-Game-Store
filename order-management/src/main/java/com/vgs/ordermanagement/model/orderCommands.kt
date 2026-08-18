@@ -23,3 +23,12 @@ data class UpdateStatusCommand(
     val updatedAt: ZonedDateTime = ZonedDateTime.now(),
     val status: OrderStatus
 )
+
+data class DeleteOrderCommand(
+    @TargetAggregateIdentifier
+    val id: OrderId,
+)
+
+data class DeleteOrdersHistoryCommand(
+    val userId: UserId,
+)

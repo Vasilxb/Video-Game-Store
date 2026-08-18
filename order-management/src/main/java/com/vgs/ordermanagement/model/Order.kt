@@ -10,8 +10,6 @@ import com.vgs.ordermanagement.model.enums.OrderStatus
 import com.vgs.ordermanagement.model.events.OrderCreatedEvent
 import com.vgs.ordermanagement.model.events.OrderDeletedEvent
 import com.vgs.ordermanagement.model.events.OrderStatusUpdatedEvent
-import com.vgs.ordermanagement.model.exceptions.VideoGameNotAvailableException
-import com.vgs.ordermanagement.repositories.CatalogRepository
 import jakarta.persistence.AttributeOverride
 import jakarta.persistence.Column
 import jakarta.persistence.Embedded

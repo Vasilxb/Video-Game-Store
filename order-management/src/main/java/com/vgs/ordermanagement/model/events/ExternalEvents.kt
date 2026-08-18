@@ -10,15 +10,30 @@ data class OrdersHistoryDeletedEvent(
     val userId: UserId,
 )
 
-data class CatalogVideoGameAddedEvent(
+data class VideoGameCreatedEvent(
     val videoGameId: VideoGameId,
-    val title: VideoGameTitle,
+    val name: VideoGameTitle,
     val price: Money,
     val userId: UserId,
     val updatedAt: ZonedDateTime = ZonedDateTime.now(),
     val capacity: Int = 0
 )
 
-data class CatalogVideoGameRemovedEvent(
+data class VideoGameDeletedEvent(
     val videoGameId: VideoGameId,
+)
+
+data class VideoGameUpdatedEvent(
+    val videoGameId: VideoGameId,
+    val name: VideoGameTitle,
+    val price: Money,
+    val userId: UserId,
+    val updatedAt: ZonedDateTime = ZonedDateTime.now(),
+    val capacity: Int = 0
+)
+
+data class VideoGameCapacityChangedEvent(
+    val videoGameId: VideoGameId,
+    val capacity: Int,
+    val updatedAt: ZonedDateTime = ZonedDateTime.now(),
 )

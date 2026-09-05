@@ -30,7 +30,6 @@ abstract class AbstractEvent(open val identifier: Identifier<out Any>) {
 
         return "$aggregate.$action"
     }
-
     @JsonIgnore
     open fun toExternalEvent(): Any? = null
 }

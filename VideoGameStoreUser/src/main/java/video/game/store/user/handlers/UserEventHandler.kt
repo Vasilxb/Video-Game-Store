@@ -6,12 +6,12 @@ import video.game.store.user.model.events.UserRegisteredEvent
 import video.game.store.user.model.events.UserProfileUpdatedEvent
 import video.game.store.user.model.events.UserDeletedEvent
 import video.game.store.user.model.events.RoleAssignedEvent
-import video.game.store.user.model.events.OrdersHistoryDeletedEvent
 import video.game.store.user.model.views.VideoGameStoreUserView
+import video.game.store.user.repositories.OrderRepository
 import video.game.store.user.repositories.VideoGameStoreUserViewJpaRepository
 
 @Component
-class UserEventHandler(val userViewRepository: VideoGameStoreUserViewJpaRepository) {
+class UserEventHandler(val userViewRepository: VideoGameStoreUserViewJpaRepository, val orderRepository: OrderRepository) {
 
     @EventHandler
     fun on(event: UserRegisteredEvent) {
@@ -51,11 +51,6 @@ class UserEventHandler(val userViewRepository: VideoGameStoreUserViewJpaReposito
         if (userViewRepository.existsById(id)) {
             userViewRepository.deleteById(id)
         }
-    }
-
-    @EventHandler
-    fun on(event: OrdersHistoryDeletedEvent) {
-        // TO DO
     }
 
     @EventHandler

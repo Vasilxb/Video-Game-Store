@@ -1,8 +1,7 @@
 package video.game.store.user.model.events
 
-import org.axonframework.modelling.command.TargetAggregateIdentifier
+import com.fasterxml.jackson.annotation.JsonIgnore
 import video.game.store.user.model.AssignRoleCommand
-import video.game.store.user.model.DeleteOrderCommand
 import video.game.store.user.model.DeleteUserAccountCommand
 import video.game.store.user.model.LoginUser2MFACommand
 import video.game.store.user.model.LoginUserCommand
@@ -16,9 +15,16 @@ import video.game.store.user.model.common.FullName
 import video.game.store.user.model.common.Gender
 import video.game.store.user.model.common.Password
 import video.game.store.user.model.common.ShippingAddress
-import video.game.store.user.model.common.VideoGameOrderId
 import video.game.store.user.model.common.VideoGameStoreUserId
 import video.game.store.user.model.enums.Role
+import video.game.store.user.model.VideoGameStoreUser
+
+abstract class UserEvent(
+    override val identifier: VideoGameStoreUserId
+) : AbstractEvent(identifier) {
+    @JsonIgnore
+    override val aggregateClass = VideoGameStoreUser::class.java
+}
 
 data class UserRegisteredEvent(
     var videoGameStoreUserId: VideoGameStoreUserId,
@@ -76,27 +82,33 @@ data class UserLoggedOutEvent(
     )
 }
 
+data class UserDeletedExternalEvent(
+    val videoGameId: VideoGameStoreUserId
+)
+
 data class UserDeletedEvent(
     var videoGameStoreUserId: VideoGameStoreUserId
 ){
     constructor(command: DeleteUserAccountCommand): this(
         videoGameStoreUserId = command.id
     )
+     fun toExternalEvent(): UserDeletedExternalEvent {
+        return UserDeletedExternalEvent(
+            videoGameId = videoGameStoreUserId
+        )
+    }
 }
 
-data class OrdersHistoryDeletedEvent(
-    var videoGameStoreUserId: VideoGameStoreUserId
+
+data class UserProfileUpdatedExternalEvent(
+    val videoGameStoreUserId: VideoGameStoreUserId,
+    val fullname: FullName,
+    val email: Email,
+    val password: Password,
+    val shippingAddress: ShippingAddress,
+    val age: Age,
+    val gender: Gender
 )
-
-data class OrderDeletedEvent(
-    var videoGameStoreUserId: VideoGameStoreUserId,
-    var videoGameOrderId: VideoGameOrderId
-){
-    constructor(command: DeleteOrderCommand): this(
-        videoGameStoreUserId = command.id,
-        videoGameOrderId = command.videoGameOrderId
-    )
-}
 
 data class UserProfileUpdatedEvent(
     var videoGameStoreUserId: VideoGameStoreUserId,
@@ -116,7 +128,23 @@ data class UserProfileUpdatedEvent(
         age = command.age,
         gender = command.gender
     )
+    fun toExternalEvent(): UserProfileUpdatedExternalEvent {
+        return UserProfileUpdatedExternalEvent(
+            videoGameStoreUserId = videoGameStoreUserId,
+            fullname = fullname,
+            email = email,
+            password = password,
+            shippingAddress = shippingAddress,
+            age = age,
+            gender = gender
+        )
+    }
 }
+
+data class RoleAssignedExternalEvent(
+    val videoGameStoreUserId: VideoGameStoreUserId,
+    val role: Role
+)
 
 data class RoleAssignedEvent(
     var videoGameStoreUserId: VideoGameStoreUserId,
@@ -126,4 +154,10 @@ data class RoleAssignedEvent(
         videoGameStoreUserId = command.id,
         role = command.role
     )
+    fun toExternalEvent(): RoleAssignedExternalEvent {
+        return RoleAssignedExternalEvent(
+            videoGameStoreUserId = videoGameStoreUserId,
+            role = role
+        )
+    }
 }

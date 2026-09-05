@@ -27,7 +27,6 @@ import video.game.store.user.model.events.UserRegistered2MFAEvent
 import video.game.store.user.model.events.UserLoggedInEvent
 import video.game.store.user.model.events.UserLoggedIn2MFAEvent
 import video.game.store.user.model.events.UserLoggedOutEvent
-import video.game.store.user.model.events.OrderDeletedEvent
 
 @Aggregate
 class VideoGameStoreUser : LabeledEntity {
@@ -44,7 +43,7 @@ class VideoGameStoreUser : LabeledEntity {
     private lateinit var role: Role
     private var mfaVerified: Boolean = false
     private var loggedIn: Boolean = false
-    private var deleted: Boolean = false
+    private var deletedAccount: Boolean = false
     @Embedded
     @AttributeOverride(name = "value", column = Column(name = "video_game_id"))
     private lateinit var videoGameOrderId: VideoGameOrderId
@@ -143,13 +142,7 @@ class VideoGameStoreUser : LabeledEntity {
     }
 
     fun on(event: UserDeletedEvent) {
-        this.deleted = true
-    }
-
-    @CommandHandler
-    fun deleteOrder(command: DeleteOrderCommand) {
-        val event = OrderDeletedEvent(command)
-        AggregateLifecycle.apply(event)
+        this.deletedAccount = true
     }
 
     @CommandHandler

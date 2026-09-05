@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import video.game.store.user.model.DeleteOrderCommand
 import video.game.store.user.model.DeleteUserAccountCommand
 import video.game.store.user.model.LoginUser2MFACommand
 import video.game.store.user.model.LoginUser2MFACommandDto
@@ -21,6 +22,7 @@ import video.game.store.user.model.RegisterUser2MFACommand
 import video.game.store.user.model.RegisterUser2MFACommandDto
 import video.game.store.user.model.RegisterUserCommand
 import video.game.store.user.model.RegisterUserCommandDto
+import video.game.store.user.model.common.VideoGameOrderId
 import video.game.store.user.model.common.VideoGameStoreUserId
 import video.game.store.user.model.views.VideoGameStoreUserView
 import video.game.store.user.services.UserViewReadService
@@ -75,6 +77,15 @@ class UserRestApi(
     @DeleteMapping("/{userId}/deleteAccount")
     fun deleteAccount(@PathVariable userId: String): ResponseEntity<Any> =
         ResponseEntity.ok(commandGateway.send<Any>(DeleteUserAccountCommand(VideoGameStoreUserId(userId))))
+
+    @DeleteMapping("/{userId}/deleteOrder")
+    fun deleteOrder(@PathVariable userId: String, @RequestParam orderId: String): ResponseEntity<Any> =
+        ResponseEntity.ok(commandGateway.send<Any>(
+            DeleteOrderCommand(
+                VideoGameStoreUserId(userId),
+                VideoGameOrderId(orderId)
+            )
+        ))
 
     @GetMapping("/user-info")
     fun userInfo(@RequestParam userId: String): VideoGameStoreUserView =

@@ -27,14 +27,7 @@ data class VideoGameOrderId(
     @Column(name = "video_game_order_id")
     val value: String
 ) {
-    constructor() : this("Video Game Order:" + UUID.randomUUID().toString())
-
-    init {
-        require(value.startsWith("Video Game:")) { "VideoGameOrderId must start with 'Video Game Order:'" }
-
-        val uuidPart = value.substringAfter("Video Game:", "")
-        require(uuidPart.length == 36) { "Invalid VideoGameOrderId format: UUID must be 36 characters long" }
-    }
+    constructor() : this(UUID.randomUUID().toString())
 
     override fun toString(): String = value
 }

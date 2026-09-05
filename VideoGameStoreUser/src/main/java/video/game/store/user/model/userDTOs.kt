@@ -47,6 +47,10 @@ data class LogoutUserCommandDto(
     val videoGameStoreUserId: VideoGameStoreUserId
 )
 
+data class DeleteUserAccountCommandDto(
+    val videoGameStoreUserId: VideoGameStoreUserId
+)
+
 data class DeleteOrderCommandDto(
     val videoGameStoreUserId: VideoGameStoreUserId,
     val videoGameOrderId: VideoGameOrderId

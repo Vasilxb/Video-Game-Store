@@ -27,12 +27,12 @@ data class VideoGameId(
     @Column(name = "video_game_id")
     val value: String
 ) {
-    constructor() : this("Video Game:" + UUID.randomUUID().toString())
+    constructor() : this("VideoGame:" + UUID.randomUUID().toString())
 
     init {
-        require(value.startsWith("Video Game:")) { "VideoGameId must start with 'Video Game:'" }
+        require(value.startsWith("VideoGame:")) { "VideoGameId must start with 'VideoGame:'" }
 
-        val uuidPart = value.substringAfter("Video Game:", "")
+        val uuidPart = value.substringAfter("VideoGame:", "")
         require(uuidPart.length == 36) { "Invalid VideoGameId format: UUID must be 36 characters long" }
     }
 
@@ -44,12 +44,12 @@ data class UserId(
     @Column(name = "user_id")
     val value: String
 ) {
-    constructor() : this("User:" + UUID.randomUUID().toString())
+    constructor() : this("VideoGameStoreUser:" + UUID.randomUUID().toString())
 
     init {
-        require(value.startsWith("User:")) { "UserId must start with 'User:'" }
+        require(value.startsWith("VideoGameStoreUser:")) { "UserId must start with 'VideoGameStoreUser:'" }
 
-        val uuidPart = value.substringAfter("User:", "")
+        val uuidPart = value.substringAfter("VideoGameStoreUser:", "")
         require(uuidPart.length == 36) { "Invalid UserId format: UUID must be 36 characters long" }
     }
 

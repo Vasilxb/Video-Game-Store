@@ -13,12 +13,12 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 open class AxonConfiguration {
 
-    @Bean
-    open fun quartzScheduler(): Scheduler {
-        val scheduler = StdSchedulerFactory().scheduler
-        if (!scheduler.isStarted) scheduler.start()
-        return scheduler
-    }
+//    @Bean
+//    open fun quartzScheduler(): Scheduler {
+//        val scheduler = StdSchedulerFactory().scheduler
+//        if (!scheduler.isStarted) scheduler.start()
+//        return scheduler
+//    }
 
     @Bean
     open fun eventScheduler(

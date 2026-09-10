@@ -30,3 +30,114 @@ services:
     environment:
       KAFKA_CLUSTERS_0_NAME: local
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
+
+  consul:
+    image: hashicorp/consul:1.18
+    container_name: consul
+    command: "agent -dev -client=0.0.0.0 -ui"
+    ports:
+      - "8500:8500"        # HTTP API and UI
+      - "8600:8600/udp"    # DNS interface
+    networks:
+      - video_game_store_net
+      - shared_net
+
+  video_game_store_db:
+    image: postgres:16.1
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: video_game_store_db
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - "5442:5432"
+    container_name: video_game_store_db
+    networks:
+      - video_game_store_net
+
+
+  catalog_app:
+    build:
+      context: ./VideoGameStoreCatalog
+    container_name: catalog_app
+    depends_on:
+      - video_game_store_db
+      - kafka
+      - consul
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://video_game_store_db:5432/video_game_store_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: admin
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      SPRING_CLOUD_CONSUL_HOST: consul
+      SPRING_CLOUD_CONSUL_PORT: 8500
+      KEYCLOAK_JWK_SET_URI: http://keycloak:8080/realms/finki-services/protocol/openid-connect/certs
+      KEYCLOAK_ISSUER_URI: http://localhost:8090/realms/finki-services
+
+    networks:
+      - video_game_store_net
+      - shared_net
+
+  user_app:
+    build:
+      context: ./VideoGameStoreUser
+    container_name: user_app
+    depends_on:
+      - video_game_store_db
+      - kafka
+      - consul
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://video_game_store_db:5432/video_game_store_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: admin
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      SPRING_CLOUD_CONSUL_HOST: consul
+      SPRING_CLOUD_CONSUL_PORT: 8500
+      KEYCLOAK_JWK_SET_URI: http://keycloak:8080/realms/finki-services/protocol/openid-connect/certs
+      KEYCLOAK_ISSUER_URI: http://localhost:8090/realms/finki-services
+
+    networks:
+      - video_game_store_net
+      - shared_net
+
+  order_app:
+    build:
+      context: ./order-management
+    container_name: order_app
+    depends_on:
+      - video_game_store_db
+      - kafka
+      - consul
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://video_game_store_db:5432/video_game_store_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: admin
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      SPRING_CLOUD_CONSUL_HOST: consul
+      SPRING_CLOUD_CONSUL_PORT: 8500
+      KEYCLOAK_JWK_SET_URI: http://keycloak:8080/realms/finki-services/protocol/openid-connect/certs
+      KEYCLOAK_ISSUER_URI: http://localhost:8090/realms/finki-services
+
+    networks:
+      - video_game_store_net
+      - shared_net
+
+volumes:
+  kafka-data:
+  db-data:
+
+networks:
+  video_game_store_net:
+    name: video_game_store_net
+    driver: bridge
+  shared_net:
+    name: shared_net
+    external: true

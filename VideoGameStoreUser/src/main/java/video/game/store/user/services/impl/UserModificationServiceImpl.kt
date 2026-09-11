@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service
 import video.game.store.user.model.RegisterUserCommand
 import video.game.store.user.model.UpdateUserAccountCommand
 import video.game.store.user.model.AssignRoleCommand
-import video.game.store.user.model.DeleteOrderCommand
 import video.game.store.user.model.DeleteUserAccountCommand
 import video.game.store.user.model.LoginUser2MFACommand
 import video.game.store.user.model.LoginUserCommand
@@ -46,7 +45,6 @@ class UserModificationServiceImpl(
     override fun deleteUserAccount(command: DeleteUserAccountCommand): CompletableFuture<Void> =
         commandGateway.send(command)
 
-    override fun deleteOrder(command: DeleteOrderCommand): CompletableFuture<Void> =
-        commandGateway.send(command)
+
 }
 

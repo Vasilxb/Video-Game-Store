@@ -56,6 +56,12 @@ services:
     container_name: video_game_store_db
     networks:
       - video_game_store_net
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d video_game_store_db" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
 
 
   catalog_app:
@@ -63,9 +69,12 @@ services:
       context: ./VideoGameStoreCatalog
     container_name: catalog_app
     depends_on:
-      - video_game_store_db
-      - kafka
-      - consul
+      video_game_store_db:
+         condition: service_healthy
+      kafka:
+        condition: service_healthy
+      consul:
+        condition: service_started
     ports:
       - "8081:8081"
     environment:
@@ -87,9 +96,12 @@ services:
       context: ./VideoGameStoreUser
     container_name: user_app
     depends_on:
-      - video_game_store_db
-      - kafka
-      - consul
+      video_game_store_db:
+        condition: service_healthy
+      kafka:
+         condition: service_healthy
+      consul:
+        condition: service_started
     ports:
       - "8080:8080"
     environment:
@@ -111,9 +123,12 @@ services:
       context: ./order-management
     container_name: order_app
     depends_on:
-      - video_game_store_db
-      - kafka
-      - consul
+      video_game_store_db:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+      consul:
+        condition: service_started
     ports:
       - "8082:8082"
     environment:

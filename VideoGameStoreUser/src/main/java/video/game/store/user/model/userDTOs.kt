@@ -6,7 +6,6 @@ import video.game.store.user.model.common.FullName
 import video.game.store.user.model.common.Gender
 import video.game.store.user.model.common.Password
 import video.game.store.user.model.common.ShippingAddress
-import video.game.store.user.model.common.VideoGameOrderId
 import video.game.store.user.model.common.VideoGameStoreUserId
 import video.game.store.user.model.enums.Role
 
@@ -49,11 +48,6 @@ data class LogoutUserCommandDto(
 
 data class DeleteUserAccountCommandDto(
     val videoGameStoreUserId: VideoGameStoreUserId
-)
-
-data class DeleteOrderCommandDto(
-    val videoGameStoreUserId: VideoGameStoreUserId,
-    val videoGameOrderId: VideoGameOrderId
 )
 
 data class AssignRoleCommandDto(

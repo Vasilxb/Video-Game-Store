@@ -7,11 +7,10 @@ import video.game.store.user.model.events.UserProfileUpdatedEvent
 import video.game.store.user.model.events.UserDeletedEvent
 import video.game.store.user.model.events.RoleAssignedEvent
 import video.game.store.user.model.views.VideoGameStoreUserView
-import video.game.store.user.repositories.OrderRepository
 import video.game.store.user.repositories.VideoGameStoreUserViewJpaRepository
 
 @Component
-class UserEventHandler(val userViewRepository: VideoGameStoreUserViewJpaRepository, val orderRepository: OrderRepository) {
+class UserEventHandler(val userViewRepository: VideoGameStoreUserViewJpaRepository) {
 
     @EventHandler
     fun on(event: UserRegisteredEvent) {

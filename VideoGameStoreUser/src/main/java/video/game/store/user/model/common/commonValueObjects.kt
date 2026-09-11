@@ -176,7 +176,7 @@ data class ShippingAddress(val value: String) {
 
 @Embeddable
 data class Age(val value: Int) {
-    protected constructor() : this(0)
+    protected constructor() : this(14)
 
     init {
         require(value in 14..100) { "You must be 14 years old for access" }

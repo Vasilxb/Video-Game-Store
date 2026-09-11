@@ -83,8 +83,9 @@ data class UserLoggedOutEvent(
 }
 
 data class UserDeletedExternalEvent(
-    val videoGameId: VideoGameStoreUserId
+    val videoGameStoreUserId: VideoGameStoreUserId
 )
+
 
 data class UserDeletedEvent(
     var videoGameStoreUserId: VideoGameStoreUserId
@@ -94,7 +95,7 @@ data class UserDeletedEvent(
     )
      fun toExternalEvent(): UserDeletedExternalEvent {
         return UserDeletedExternalEvent(
-            videoGameId = videoGameStoreUserId
+            videoGameStoreUserId = videoGameStoreUserId
         )
     }
 }

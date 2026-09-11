@@ -6,7 +6,6 @@ import video.game.store.user.model.common.FullName
 import video.game.store.user.model.common.Gender
 import video.game.store.user.model.common.Password
 import video.game.store.user.model.common.ShippingAddress
-import video.game.store.user.model.common.VideoGameOrderId
 import video.game.store.user.model.common.VideoGameStoreUserId
 import video.game.store.user.model.enums.Role
 
@@ -46,12 +45,6 @@ data class LogoutUserCommand(
 data class DeleteUserAccountCommand(
     @TargetAggregateIdentifier
     var id: VideoGameStoreUserId
-)
-
-data class DeleteOrderCommand(
-    @TargetAggregateIdentifier
-    var id: VideoGameStoreUserId,
-    var videoGameOrderId : VideoGameOrderId
 )
 
 data class UpdateUserAccountCommand(

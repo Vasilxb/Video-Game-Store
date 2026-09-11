@@ -14,8 +14,6 @@ import video.game.store.user.model.RegisterUser2MFACommand
 import video.game.store.user.model.LoginUser2MFACommand
 import video.game.store.user.model.LogoutUserCommand
 import video.game.store.user.model.DeleteUserAccountCommand
-import video.game.store.user.model.DeleteOrderCommand
-import video.game.store.user.model.DeleteOrderCommandDto
 import video.game.store.user.model.LoginUser2MFACommandDto
 import video.game.store.user.model.LoginUserCommandDto
 import video.game.store.user.model.LogoutUserCommandDto
@@ -23,7 +21,6 @@ import video.game.store.user.model.RegisterUser2MFACommandDto
 import video.game.store.user.model.RegisterUserCommandDto
 import video.game.store.user.model.UpdateUserAccountCommandDto
 import video.game.store.user.model.common.VideoGameStoreUserId
-import video.game.store.user.model.common.VideoGameOrderId
 import video.game.store.user.services.UserModificationService
 
 @RestController
@@ -109,17 +106,6 @@ class UserCommandDispatcher(
         ResponseEntity.ok(
             userModificationService.deleteUserAccount(
                 DeleteUserAccountCommand(dto.videoGameStoreUserId)
-            )
-        )
-
-    @PostMapping("/DeleteOrderCommand")
-    fun deleteOrder(@RequestBody dto: DeleteOrderCommandDto): ResponseEntity<Any> =
-        ResponseEntity.ok(
-            userModificationService.deleteOrder(
-                DeleteOrderCommand(
-                    id = dto.videoGameStoreUserId,
-                    videoGameOrderId = VideoGameOrderId(dto.videoGameOrderId.value)
-                )
             )
         )
 

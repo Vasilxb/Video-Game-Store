@@ -1,26 +1,16 @@
 package com.vgs.catalog.model.common
 
-import com.vgs.catalog.model.VideoGame
 import jakarta.persistence.Column
 import jakarta.persistence.Embeddable
-import java.util.UUID
+import java.io.Serializable
 
 @Embeddable
-open class UserId(value: String) :
-    Identifier(value, VideoGame::class.java) {
+data class UserId(
+    @Column(name = "value")
+    val value: String
+) : Serializable {
 
-    constructor() : this(UUID.randomUUID().toString())
+    constructor() : this("")
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other?.javaClass != javaClass) return false
-
-        other as UserId
-
-        return this.value == other.value
-    }
-
-    override fun hashCode(): Int {
-        return value.hashCode()
-    }
+    override fun toString(): String = value
 }

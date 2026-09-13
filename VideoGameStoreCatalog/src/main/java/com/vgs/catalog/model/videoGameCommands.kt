@@ -44,10 +44,12 @@ data class DeleteVideoGameCommand(
 )
 data class DecreaseVideoGameCapacityCommand(
     @TargetAggregateIdentifier
-    val id: VideoGameId
+    val id: VideoGameId,
+    val amount: Int = 1
 )
 
 data class IncreaseVideoGameCapacityCommand(
     @TargetAggregateIdentifier
-    val id: VideoGameId
+    val id: VideoGameId,
+    val amount: Int = 1
 )

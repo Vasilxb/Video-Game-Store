@@ -1,0 +1,253 @@
+{
+  "consumer": {
+    "name": "order-management"
+  },
+  "provider": {
+    "name": "catalog-service"
+  },
+  "messages": [
+    {
+      "description": "VideoGameCapacityChangedEvent when capacity changes",
+      "metaData": {
+        "Content-Type": "application/json; charset\u003dUTF-8"
+      },
+      "contents": {
+        "videoGameId": {
+          "value": "VideoGame:550e8400-e29b-41d4-a716-446655440000"
+        },
+        "capacity": 5,
+        "updatedAt": "2024-01-03T10:15:30+01:00[Europe/Warsaw]"
+      },
+      "matchingRules": {
+        "body": {
+          "$.videoGameId.value": {
+            "matchers": [
+              {
+                "match": "regex",
+                "regex": "VideoGame:[0-9a-fA-F-]{36}"
+              }
+            ],
+            "combine": "AND"
+          },
+          "$.capacity": {
+            "matchers": [
+              {
+                "match": "integer"
+              }
+            ],
+            "combine": "AND"
+          },
+          "$.updatedAt": {
+            "matchers": [
+              {
+                "match": "regex",
+                "regex": "\\d{4}-\\d{2}-\\d{2}T.*"
+              }
+            ],
+            "combine": "AND"
+          }
+        }
+      }
+    },
+    {
+      "description": "VideoGameCreatedEvent when a video game is added",
+      "metaData": {
+        "Content-Type": "application/json; charset\u003dUTF-8"
+      },
+      "contents": {
+        "price": {
+          "amount": 59.99,
+          "currency": "EUR"
+        },
+        "name": "The Witcher 3",
+        "videoGameId": {
+          "value": "VideoGame:550e8400-e29b-41d4-a716-446655440000"
+        },
+        "userId": {
+          "value": "VideoGameStoreUser:550e8400-e29b-41d4-a716-446655440001"
+        },
+        "updatedAt": "2024-01-01T10:15:30+01:00[Europe/Warsaw]",
+        "capacity": 10
+      },
+      "matchingRules": {
+        "body": {
+          "$.videoGameId.value": {
+            "matchers": [
+              {
+                "match": "regex",
+                "regex": "VideoGame:[0-9a-fA-F-]{36}"
+              }
+            ],
+            "combine": "AND"
+          },
+          "$.name": {
+            "matchers": [
+              {
+                "match": "type"
+              }
+            ],
+            "combine": "AND"
+          },
+          "$.price.amount": {
+            "matchers": [
+              {
+                "match": "decimal"
+              }
+            ],
+            "combine": "AND"
+          },
+          "$.price.currency": {
+            "matchers": [
+              {
+                "match": "type"
+              }
+            ],
+            "combine": "AND"
+          },
+          "$.userId.value": {
+            "matchers": [
+              {
+                "match": "regex",
+                "regex": "VideoGameStoreUser:[0-9a-fA-F-]{36}"
+              }
+            ],
+            "combine": "AND"
+          },
+          "$.updatedAt": {
+            "matchers": [
+              {
+                "match": "regex",
+                "regex": "\\d{4}-\\d{2}-\\d{2}T.*"
+              }
+            ],
+            "combine": "AND"
+          },
+          "$.capacity": {
+            "matchers": [
+              {
+                "match": "integer"
+              }
+            ],
+            "combine": "AND"
+          }
+        }
+      }
+    },
+    {
+      "description": "VideoGameDeletedEvent when a video game is deleted",
+      "metaData": {
+        "Content-Type": "application/json; charset\u003dUTF-8"
+      },
+      "contents": {
+        "videoGameId": {
+          "value": "VideoGame:550e8400-e29b-41d4-a716-446655440000"
+        }
+      },
+      "matchingRules": {
+        "body": {
+          "$.videoGameId.value": {
+            "matchers": [
+              {
+                "match": "regex",
+                "regex": "VideoGame:[0-9a-fA-F-]{36}"
+              }
+            ],
+            "combine": "AND"
+          }
+        }
+      }
+    },
+    {
+      "description": "VideoGameUpdatedEvent when a video game is updated",
+      "metaData": {
+        "Content-Type": "application/json; charset\u003dUTF-8"
+      },
+      "contents": {
+        "price": {
+          "amount": 49.99,
+          "currency": "EUR"
+        },
+        "name": "The Witcher 3 Updated",
+        "videoGameId": {
+          "value": "VideoGame:550e8400-e29b-41d4-a716-446655440000"
+        },
+        "userId": {
+          "value": "VideoGameStoreUser:550e8400-e29b-41d4-a716-446655440001"
+        },
+        "updatedAt": "2024-01-02T10:15:30+01:00[Europe/Warsaw]",
+        "capacity": 20
+      },
+      "matchingRules": {
+        "body": {
+          "$.videoGameId.value": {
+            "matchers": [
+              {
+                "match": "regex",
+                "regex": "VideoGame:[0-9a-fA-F-]{36}"
+              }
+            ],
+            "combine": "AND"
+          },
+          "$.name": {
+            "matchers": [
+              {
+                "match": "type"
+              }
+            ],
+            "combine": "AND"
+          },
+          "$.price.amount": {
+            "matchers": [
+              {
+                "match": "decimal"
+              }
+            ],
+            "combine": "AND"
+          },
+          "$.price.currency": {
+            "matchers": [
+              {
+                "match": "type"
+              }
+            ],
+            "combine": "AND"
+          },
+          "$.userId.value": {
+            "matchers": [
+              {
+                "match": "regex",
+                "regex": "VideoGameStoreUser:[0-9a-fA-F-]{36}"
+              }
+            ],
+            "combine": "AND"
+          },
+          "$.updatedAt": {
+            "matchers": [
+              {
+                "match": "regex",
+                "regex": "\\d{4}-\\d{2}-\\d{2}T.*"
+              }
+            ],
+            "combine": "AND"
+          },
+          "$.capacity": {
+            "matchers": [
+              {
+                "match": "integer"
+              }
+            ],
+            "combine": "AND"
+          }
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "pactSpecification": {
+      "version": "3.0.0"
+    },
+    "pact-jvm": {
+      "version": "3.6.3"
+    }
+  }
+}

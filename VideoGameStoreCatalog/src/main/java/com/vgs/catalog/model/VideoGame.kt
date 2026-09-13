@@ -26,7 +26,7 @@ import java.time.ZonedDateTime
 
 @Aggregate(repository = "axonVideoGameRepository")
 @Entity
-@Table(name = "video_games")
+@Table(name = "video_game_aggregates")
 class VideoGame : LabeledEntity {
 
     @AggregateIdentifier
@@ -46,6 +46,7 @@ class VideoGame : LabeledEntity {
     @Enumerated(EnumType.STRING)
     private lateinit var platform: Platform
 
+    @Column(name = "release_year")
     private var year: Int = 0
 
     private lateinit var studio: String
@@ -84,7 +85,7 @@ class VideoGame : LabeledEntity {
 
 
     @CommandHandler
-    fun update(command: UpdateVideoGameCommand) {
+    fun update(command: UpdateVideoGameCommand): VideoGameId {
 
         val event = VideoGameUpdatedEvent(
             id = command.id,
@@ -101,11 +102,13 @@ class VideoGame : LabeledEntity {
 
         this.on(event)
         AggregateLifecycle.apply(event)
+
+        return this.id
     }
 
 
     @CommandHandler
-    fun delete(command: DeleteVideoGameCommand) {
+    fun delete(command: DeleteVideoGameCommand): VideoGameId {
 
         val event = VideoGameDeletedEvent(
             id = command.id,
@@ -114,6 +117,8 @@ class VideoGame : LabeledEntity {
 
         this.on(event)
         AggregateLifecycle.apply(event)
+
+        return command.id
     }
 
 
@@ -162,18 +167,28 @@ class VideoGame : LabeledEntity {
     override fun getLabel(): String {
         return "Video Game: $id"
     }
+
     @CommandHandler
     fun decreaseCapacity(
         command: DecreaseVideoGameCapacityCommand
     ) {
-        require(capacity > 0) {
+        require(command.amount > 0) {
+            "Amount must be greater than zero"
+        }
+
+        require(capacity >= command.amount) {
             "Video game capacity cannot be negative"
         }
 
         val event = VideoGameCapacityChangedEvent(
             id = this.id,
             updatedAt = ZonedDateTime.now(),
-            capacity = capacity - 1
+
+            // New total used internally by Catalog
+            capacity = capacity - command.amount,
+
+            // Amount sent to other microservices
+            capacityChange = -command.amount
         )
 
         this.on(event)
@@ -185,10 +200,19 @@ class VideoGame : LabeledEntity {
     fun increaseCapacity(
         command: IncreaseVideoGameCapacityCommand
     ) {
+        require(command.amount > 0) {
+            "Amount must be greater than zero"
+        }
+
         val event = VideoGameCapacityChangedEvent(
             id = this.id,
             updatedAt = ZonedDateTime.now(),
-            capacity = capacity + 1
+
+            // New total used internally by Catalog
+            capacity = capacity + command.amount,
+
+            // Amount sent to other microservices
+            capacityChange = command.amount
         )
 
         this.on(event)

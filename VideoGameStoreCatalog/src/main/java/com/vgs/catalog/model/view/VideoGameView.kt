@@ -12,17 +12,17 @@ import jakarta.persistence.Embedded
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
-import jakarta.persistence.Id
+import jakarta.persistence.EmbeddedId
 import jakarta.persistence.Table
-import org.hibernate.annotations.Immutable
+//import org.hibernate.annotations.Immutable
 import java.time.ZonedDateTime
 
 @Entity
 @Table(name = "video_games")
-@Immutable
+//@Immutable
 data class VideoGameView(
 
-    @Id
+    @EmbeddedId
     @AttributeOverride(
         name = "value",
         column = Column(name = "id")
@@ -38,6 +38,7 @@ data class VideoGameView(
     @Enumerated(EnumType.STRING)
     val platform: Platform,
 
+    @Column(name = "release_year")
     val year: Int,
 
     val studio: String,

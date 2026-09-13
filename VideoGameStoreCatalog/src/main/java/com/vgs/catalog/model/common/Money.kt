@@ -43,8 +43,13 @@ data class Money(
 
         other as Money
 
-        return amount == other.amount
+        return amount == other.amount &&
+                currency == other.currency
     }
 
-    override fun hashCode(): Int = amount.hashCode()
+    override fun hashCode(): Int {
+        var result = amount.hashCode()
+        result = 31 * result + currency.hashCode()
+        return result
+    }
 }

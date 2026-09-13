@@ -8,6 +8,7 @@ import com.vgs.catalog.model.common.VideoGameId
 import com.vgs.catalog.model.enums.Platform
 import java.time.ZonedDateTime
 
+
 abstract class VideoGameEvent(
     open val id: VideoGameId
 ) : AbstractEvent(id) {
@@ -17,8 +18,19 @@ abstract class VideoGameEvent(
 }
 
 
+/*
+ * Simple ID used only in external Kafka events.
+ *
+ * This prevents Catalog's internal entityClass field from
+ * being sent to other microservices.
+ */
+data class ExternalVideoGameId(
+    val value: String
+)
+
+
 data class VideoGameCreatedExternalEvent(
-    val videoGameId: VideoGameId,
+    val videoGameId: ExternalVideoGameId,
     val name: String,
     val price: Money,
     val userId: UserId,
@@ -28,7 +40,7 @@ data class VideoGameCreatedExternalEvent(
 
 
 data class VideoGameUpdatedExternalEvent(
-    val videoGameId: VideoGameId,
+    val videoGameId: ExternalVideoGameId,
     val name: String,
     val price: Money,
     val userId: UserId,
@@ -38,13 +50,17 @@ data class VideoGameUpdatedExternalEvent(
 
 
 data class VideoGameDeletedExternalEvent(
-    val videoGameId: VideoGameId,
+    val videoGameId: ExternalVideoGameId,
 )
 
 
 data class VideoGameCapacityChangedExternalEvent(
-    val videoGameId: VideoGameId,
+    val videoGameId: ExternalVideoGameId,
+
+    // Amount added/removed.
+    // Examples: +5, -3
     val capacity: Int,
+
     val updatedAt: ZonedDateTime = ZonedDateTime.now(),
 )
 
@@ -61,14 +77,16 @@ data class VideoGameCreatedEvent(
     val storeId: UserId,
     val capacity: Int
 ) : VideoGameEvent(id) {
-    override fun toExternalEvent(): VideoGameCreatedExternalEvent = VideoGameCreatedExternalEvent(
-        videoGameId = id,
-        name = name,
-        price = price,
-        userId = storeId,
-        updatedAt = updatedAt,
-        capacity = capacity,
-    )
+
+    override fun toExternalEvent(): VideoGameCreatedExternalEvent =
+        VideoGameCreatedExternalEvent(
+            videoGameId = ExternalVideoGameId(id.value),
+            name = name,
+            price = price,
+            userId = storeId,
+            updatedAt = updatedAt,
+            capacity = capacity,
+        )
 }
 
 
@@ -84,14 +102,16 @@ data class VideoGameUpdatedEvent(
     val storeId: UserId,
     val capacity: Int
 ) : VideoGameEvent(id) {
-    override fun toExternalEvent(): VideoGameUpdatedExternalEvent = VideoGameUpdatedExternalEvent(
-        videoGameId = id,
-        name = name,
-        price = price,
-        userId = storeId,
-        updatedAt = updatedAt,
-        capacity = capacity,
-    )
+
+    override fun toExternalEvent(): VideoGameUpdatedExternalEvent =
+        VideoGameUpdatedExternalEvent(
+            videoGameId = ExternalVideoGameId(id.value),
+            name = name,
+            price = price,
+            userId = storeId,
+            updatedAt = updatedAt,
+            capacity = capacity,
+        )
 }
 
 
@@ -99,20 +119,31 @@ data class VideoGameDeletedEvent(
     override val id: VideoGameId,
     val updatedAt: ZonedDateTime
 ) : VideoGameEvent(id) {
-    override fun toExternalEvent(): VideoGameDeletedExternalEvent = VideoGameDeletedExternalEvent(
-        videoGameId = id,
-    )
+
+    override fun toExternalEvent(): VideoGameDeletedExternalEvent =
+        VideoGameDeletedExternalEvent(
+            videoGameId = ExternalVideoGameId(id.value),
+        )
 }
 
 
 data class VideoGameCapacityChangedEvent(
     override val id: VideoGameId,
     val updatedAt: ZonedDateTime,
-    val capacity: Int
+
+    // New absolute capacity inside Catalog.
+    // Example: old 15, remove 3 -> capacity = 12
+    val capacity: Int,
+
+    // Change sent through Kafka.
+    // Example: old 15, remove 3 -> capacityChange = -3
+    val capacityChange: Int
 ) : VideoGameEvent(id) {
-    override fun toExternalEvent(): VideoGameCapacityChangedExternalEvent = VideoGameCapacityChangedExternalEvent(
-        videoGameId = id,
-        capacity = capacity,
-        updatedAt = updatedAt,
-    )
+
+    override fun toExternalEvent(): VideoGameCapacityChangedExternalEvent =
+        VideoGameCapacityChangedExternalEvent(
+            videoGameId = ExternalVideoGameId(id.value),
+            capacity = capacityChange,
+            updatedAt = updatedAt,
+        )
 }

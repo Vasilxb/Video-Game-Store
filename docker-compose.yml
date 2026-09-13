@@ -2,126 +2,188 @@ services:
   kafka:
     image: apache/kafka:3.8.0
     container_name: comm-test-kafka
+
     ports:
-      - "9092:9092"
+      - "9092:29092"
+
     environment:
       KAFKA_NODE_ID: 1
       KAFKA_PROCESS_ROLES: broker,controller
-      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+
+      # INTERNAL = other Docker containers
+      # EXTERNAL = programs running directly on your PC / IntelliJ
+      # CONTROLLER = Kafka's internal KRaft controller
+      KAFKA_LISTENERS: INTERNAL://0.0.0.0:9092,EXTERNAL://0.0.0.0:29092,CONTROLLER://0.0.0.0:9093
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:9092,EXTERNAL://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT,CONTROLLER:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
       KAFKA_CONTROLLER_QUORUM_VOTERS: 1@localhost:9093
+
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+
     healthcheck:
-      test: ["CMD", "/opt/kafka/bin/kafka-broker-api-versions.sh", "--bootstrap-server", "localhost:9092"]
+      test:
+        [
+          "CMD",
+          "/opt/kafka/bin/kafka-broker-api-versions.sh",
+          "--bootstrap-server",
+          "localhost:9092"
+        ]
       interval: 5s
       timeout: 5s
       retries: 10
 
+    networks:
+      - video_game_store_net
+
+
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
     container_name: comm-test-kafka-ui
+
     depends_on:
       - kafka
+
     ports:
       - "8090:8080"
+
     environment:
       KAFKA_CLUSTERS_0_NAME: local
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
 
+    networks:
+      - video_game_store_net
+
+
   consul:
     image: hashicorp/consul:1.18
     container_name: consul
+
     command: "agent -dev -client=0.0.0.0 -ui"
+
     ports:
-      - "8500:8500"        # HTTP API and UI
-      - "8600:8600/udp"    # DNS interface
+      - "8500:8500"
+      - "8600:8600/udp"
+
+    healthcheck:
+      test: ["CMD", "consul", "members"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
     networks:
       - video_game_store_net
       - shared_net
 
+
   video_game_store_db:
     image: postgres:16.1
     restart: always
+
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: video_game_store_db
+
     volumes:
       - db-data:/var/lib/postgresql/data
+
     ports:
       - "5442:5432"
+
     container_name: video_game_store_db
-    networks:
-      - video_game_store_net
+
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres -d video_game_store_db" ]
+      test: ["CMD-SHELL", "pg_isready -U postgres -d video_game_store_db"]
       interval: 5s
       timeout: 5s
       retries: 10
       start_period: 10s
 
+    networks:
+      - video_game_store_net
+
 
   catalog_app:
     build:
       context: ./VideoGameStoreCatalog
+
     container_name: catalog_app
+
     depends_on:
       video_game_store_db:
-         condition: service_healthy
+        condition: service_healthy
       kafka:
         condition: service_healthy
       consul:
         condition: service_started
+
     ports:
       - "8081:8081"
+
     environment:
+      SPRING_PROFILES_ACTIVE: docker
+
       SPRING_DATASOURCE_URL: jdbc:postgresql://video_game_store_db:5432/video_game_store_db
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: admin
+
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+
       SPRING_CLOUD_CONSUL_HOST: consul
       SPRING_CLOUD_CONSUL_PORT: 8500
+
       KEYCLOAK_JWK_SET_URI: http://keycloak:8080/realms/finki-services/protocol/openid-connect/certs
       KEYCLOAK_ISSUER_URI: http://localhost:8090/realms/finki-services
 
     networks:
       - video_game_store_net
       - shared_net
+
 
   user_app:
     build:
       context: ./VideoGameStoreUser
+
     container_name: user_app
+
     depends_on:
       video_game_store_db:
         condition: service_healthy
       kafka:
-         condition: service_healthy
+        condition: service_healthy
       consul:
         condition: service_started
+
     ports:
       - "8080:8080"
+
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://video_game_store_db:5432/video_game_store_db
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: admin
+
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+
       SPRING_CLOUD_CONSUL_HOST: consul
       SPRING_CLOUD_CONSUL_PORT: 8500
+
       KEYCLOAK_JWK_SET_URI: http://keycloak:8080/realms/finki-services/protocol/openid-connect/certs
       KEYCLOAK_ISSUER_URI: http://localhost:8090/realms/finki-services
 
     networks:
       - video_game_store_net
       - shared_net
+
 
   order_app:
     build:
       context: ./order-management
+
     container_name: order_app
+
     depends_on:
       video_game_store_db:
         condition: service_healthy
@@ -129,30 +191,38 @@ services:
         condition: service_healthy
       consul:
         condition: service_started
+
     ports:
       - "8082:8082"
+
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://video_game_store_db:5432/video_game_store_db
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: admin
+
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+
       SPRING_CLOUD_CONSUL_HOST: consul
       SPRING_CLOUD_CONSUL_PORT: 8500
+
       KEYCLOAK_JWK_SET_URI: http://keycloak:8080/realms/finki-services/protocol/openid-connect/certs
       KEYCLOAK_ISSUER_URI: http://localhost:8090/realms/finki-services
 
     networks:
       - video_game_store_net
       - shared_net
+
 
 volumes:
   kafka-data:
   db-data:
 
+
 networks:
   video_game_store_net:
     name: video_game_store_net
     driver: bridge
+
   shared_net:
     name: shared_net
     external: true

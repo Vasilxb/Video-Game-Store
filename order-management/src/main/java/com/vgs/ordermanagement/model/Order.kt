@@ -79,7 +79,8 @@ class Order : LabeledEntity {
         val event = OrderStatusUpdatedEvent(
             id = command.id,
             updatedAt = command.updatedAt,
-            status = command.status
+            status = command.status,
+            videoGameId = this.videoGameId
         )
         this.on(event)
         AggregateLifecycle.apply(event)

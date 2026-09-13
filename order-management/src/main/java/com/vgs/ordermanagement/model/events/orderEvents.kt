@@ -62,24 +62,28 @@ data class OrderStatusUpdatedExternalEvent(
     val id: OrderId,
     val updatedAt: ZonedDateTime,
     val status: OrderStatus,
+    val videoGameId: VideoGameId,
 )
 
 data class OrderStatusUpdatedEvent(
     override val id: OrderId,
     val updatedAt: ZonedDateTime,
     val status: OrderStatus,
+    val videoGameId: VideoGameId,
 ) : OrderEvent(id) {
-    constructor(command: UpdateStatusCommand) : this(
+    constructor(command: UpdateStatusCommand, videoGameId: VideoGameId) : this(
         id = command.id,
         updatedAt = command.updatedAt,
-        status = command.status
+        status = command.status,
+        videoGameId = videoGameId
     )
 
     override fun toExternalEvent(): Any? {
         return OrderStatusUpdatedExternalEvent(
             id,
             updatedAt,
-            status
+            status,
+            videoGameId
         )
     }
 }

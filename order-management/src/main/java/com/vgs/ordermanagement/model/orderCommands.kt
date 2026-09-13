@@ -21,7 +21,7 @@ data class UpdateStatusCommand(
     @TargetAggregateIdentifier
     val id: OrderId,
     val updatedAt: ZonedDateTime = ZonedDateTime.now(),
-    val status: OrderStatus
+    val status: OrderStatus,
 )
 
 data class DeleteOrderCommand(

@@ -1,8 +1,10 @@
 package com.vgs.ordermanagement.model.common
 
+import com.fasterxml.jackson.annotation.JsonCreator
 import jakarta.persistence.Embeddable
 import java.util.*
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.annotation.JsonValue
 import com.vgs.ordermanagement.model.Order
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -106,6 +108,6 @@ data class Money(@Column(name = "amount") val amount: BigDecimal, val currency: 
 }
 
 @Embeddable
-data class VideoGameTitle(
-    val value: String
+data class VideoGameTitle @JsonCreator constructor(
+    @JsonValue val value: String
 )

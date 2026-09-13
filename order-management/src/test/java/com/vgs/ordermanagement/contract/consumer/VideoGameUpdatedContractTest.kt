@@ -66,9 +66,7 @@ class VideoGameUpdatedContractTest {
             .closeObject()
 
         body
-            .`object`("name")
-            .stringType("value", "The Witcher 3 Updated")
-            .closeObject()
+            .stringType("name", "The Witcher 3 Updated")
 
         body
             .`object`("price")

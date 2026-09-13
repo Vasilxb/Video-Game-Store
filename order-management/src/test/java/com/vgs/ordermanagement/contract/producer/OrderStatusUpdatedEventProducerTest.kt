@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.vgs.ordermanagement.model.common.OrderId
+import com.vgs.ordermanagement.model.common.VideoGameId
 import com.vgs.ordermanagement.model.enums.OrderStatus
 import com.vgs.ordermanagement.model.events.OrderStatusUpdatedExternalEvent
 import org.junit.jupiter.api.TestTemplate
@@ -46,7 +47,10 @@ class OrderStatusUpdatedEventProducerTest {
             updatedAt = ZonedDateTime.parse(
                 "2024-01-02T10:15:30+01:00[Europe/Warsaw]"
             ),
-            status = OrderStatus.SHIPPED
+            status = OrderStatus.SHIPPED,
+            videoGameId = VideoGameId(
+                "VideoGame:550e8400-e29b-41d4-a716-446655440000"
+            )
         )
 
         return MessageAndMetadata(

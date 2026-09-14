@@ -17,7 +17,7 @@ class OrderExternalEventHandler(
 
     @KafkaListener(
         topics = ["order.created"],
-        groupId = "catalog-order-events"
+        groupId = "order-events"
     )
     fun handleOrderCreated(payload: String) {
 
@@ -35,7 +35,8 @@ class OrderExternalEventHandler(
     }
     @KafkaListener(
         topics = ["order.status.updated"],
-        groupId = "catalog-order-events"
+        groupId = "order-events"
+
     )
     fun handleOrderStatusUpdated(payload: String) {
 

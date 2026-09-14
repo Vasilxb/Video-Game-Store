@@ -2,9 +2,12 @@ package com.vgs.ordermanagement.controllers
 
 import com.vgs.ordermanagement.model.CreateOrderCommand
 import com.vgs.ordermanagement.model.CreateOrderCommandDto
-import com.vgs.ordermanagement.model.UpdateOrderStatusDto
+import com.vgs.ordermanagement.model.DeleteOrderCommand
+import com.vgs.ordermanagement.model.DeleteOrderCommandDto
+import com.vgs.ordermanagement.model.UpdateOrderStatusCommandDto
 import com.vgs.ordermanagement.model.UpdateStatusCommand
 import com.vgs.ordermanagement.model.common.UserId
+import com.vgs.ordermanagement.model.enums.OrderStatus
 import com.vgs.ordermanagement.services.OrderModificationService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
@@ -23,8 +26,6 @@ class OrderCommandDispatcher (
             orderModificationService
                 .createOrder(
                     CreateOrderCommand(
-                        amount = commandDto.amount,
-                        status = commandDto.status,
                         videoGameId = commandDto.videoGameId,
                         userId = UserId() // TODO: get the authenticated user
                     )
@@ -33,12 +34,24 @@ class OrderCommandDispatcher (
     }
 
     @PostMapping("/UpdateOrderStatusCommand")
-    fun updateOrderStatus(@RequestBody commandDto: UpdateOrderStatusDto) : ResponseEntity<Any> {
+    fun updateOrderStatus(@RequestBody commandDto: UpdateOrderStatusCommandDto) : ResponseEntity<Any> {
         return ResponseEntity.ok(
             orderModificationService
                 .updateStatus(
                     UpdateStatusCommand(
                         status = commandDto.status,
+                        id = commandDto.orderId,
+                    )
+                ).get()
+        )
+    }
+
+    @PostMapping("/DeleteOrderCommand")
+    fun deleteOrder(@RequestBody commandDto: DeleteOrderCommandDto) : ResponseEntity<Any> {
+        return ResponseEntity.ok(
+            orderModificationService
+                .deleteOrder(
+                    DeleteOrderCommand(
                         id = commandDto.orderId,
                     )
                 ).get()

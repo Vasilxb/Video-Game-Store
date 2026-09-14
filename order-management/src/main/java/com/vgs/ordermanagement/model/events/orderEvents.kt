@@ -23,7 +23,6 @@ abstract class OrderEvent(
 data class OrderCreatedExternalEvent(
     val id: OrderId,
     val updatedAt: ZonedDateTime,
-    val amount: Money,
     val status: OrderStatus,
     val userId: UserId,
     val videoGameId: VideoGameId,
@@ -32,7 +31,6 @@ data class OrderCreatedExternalEvent(
 data class OrderCreatedEvent(
     override val id: OrderId,
     val updatedAt: ZonedDateTime,
-    val amount: Money,
     val status: OrderStatus,
     val userId: UserId,
     val videoGameId: VideoGameId,
@@ -40,7 +38,6 @@ data class OrderCreatedEvent(
     constructor(command: CreateOrderCommand) : this(
         id = command.id,
         updatedAt = command.updatedAt,
-        amount = command.amount,
         status = command.status,
         userId = command.userId,
         videoGameId = command.videoGameId,
@@ -50,7 +47,6 @@ data class OrderCreatedEvent(
         return OrderCreatedExternalEvent(
             id,
             updatedAt,
-            amount,
             status,
             userId,
             videoGameId
@@ -78,7 +74,7 @@ data class OrderStatusUpdatedEvent(
         videoGameId = videoGameId
     )
 
-    override fun toExternalEvent(): Any? {
+    override fun toExternalEvent(): OrderStatusUpdatedExternalEvent {
         return OrderStatusUpdatedExternalEvent(
             id,
             updatedAt,

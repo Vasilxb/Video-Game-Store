@@ -6,12 +6,14 @@ import com.vgs.ordermanagement.model.common.VideoGameId
 import com.vgs.ordermanagement.model.enums.OrderStatus
 
 data class CreateOrderCommandDto(
-    val amount: Money,
-    val status: OrderStatus,
     val videoGameId: VideoGameId
 )
 
-data class UpdateOrderStatusDto(
+data class UpdateOrderStatusCommandDto(
     val status: OrderStatus,
+    val orderId: OrderId
+)
+
+data class DeleteOrderCommandDto(
     val orderId: OrderId
 )

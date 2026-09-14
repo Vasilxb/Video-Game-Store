@@ -31,8 +31,6 @@ data class OrderView (
     @Enumerated(EnumType.STRING)
     val status: OrderStatus,
 
-    val amount: Money,
-
     @Embedded
     @AttributeOverride(name = "value", column = Column(name = "video_game_id"))
     val videoGameId: VideoGameId,

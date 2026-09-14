@@ -57,7 +57,6 @@ class Order : LabeledEntity {
             id = command.id,
             updatedAt = command.updatedAt,
             status = command.status,
-            amount = command.amount,
             videoGameId = command.videoGameId,
             userId = command.userId,
         )
@@ -68,7 +67,6 @@ class Order : LabeledEntity {
     fun on(event: OrderCreatedEvent) {
         this.id = event.id
         this.updatedAt = event.updatedAt
-        this.amount = event.amount
         this.status = event.status
         this.videoGameId = event.videoGameId
         this.userId = event.userId
@@ -110,5 +108,4 @@ class Order : LabeledEntity {
     override fun getLabel(): String {
         return "Order: $id"
     }
-
 }

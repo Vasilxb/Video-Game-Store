@@ -47,7 +47,7 @@ data class UserId(
     constructor() : this("VideoGameStoreUser:" + UUID.randomUUID().toString())
 
     init {
-        require(value.startsWith("VideoGameStoreUser:")) { "UserId must start with 'VideoGameStoreUser:'" }
+        require(value.startsWith("VideoGameStoreUser:") || value.startsWith("UserId:")) { "UserId must start with 'VideoGameStoreUser:' or 'UserId:'" }
 
         val uuidPart = value.substringAfter("VideoGameStoreUser:", "")
         require(uuidPart.length == 36) { "Invalid UserId format: UUID must be 36 characters long" }

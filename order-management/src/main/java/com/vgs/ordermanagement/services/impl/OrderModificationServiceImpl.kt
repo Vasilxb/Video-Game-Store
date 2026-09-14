@@ -1,6 +1,7 @@
 package com.vgs.ordermanagement.services.impl
 
 import com.vgs.ordermanagement.model.CreateOrderCommand
+import com.vgs.ordermanagement.model.DeleteOrderCommand
 import com.vgs.ordermanagement.model.UpdateStatusCommand
 import com.vgs.ordermanagement.model.common.OrderId
 import com.vgs.ordermanagement.model.exceptions.VideoGameNotAvailableException
@@ -21,13 +22,14 @@ class OrderModificationServiceImpl (
 
         if (game.capacity == 0) throw VideoGameNotAvailableException(command.videoGameId)
 
-        // make sure user doesn't give fake price in the api call
-        command.amount = game.price
-
         return commandGateway.send(command)
     }
 
     override fun updateStatus(command: UpdateStatusCommand): CompletableFuture<OrderId> {
+        return commandGateway.send(command)
+    }
+
+    override fun deleteOrder(command: DeleteOrderCommand): CompletableFuture<OrderId> {
         return commandGateway.send(command)
     }
 }

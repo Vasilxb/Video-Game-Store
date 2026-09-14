@@ -6,9 +6,6 @@ import com.vgs.ordermanagement.model.common.VideoGameId
 import com.vgs.ordermanagement.model.common.VideoGameTitle
 import java.time.ZonedDateTime
 
-data class OrdersHistoryDeletedEvent(
-    val userId: UserId,
-)
 
 data class VideoGameCreatedEvent(
     val videoGameId: VideoGameId,

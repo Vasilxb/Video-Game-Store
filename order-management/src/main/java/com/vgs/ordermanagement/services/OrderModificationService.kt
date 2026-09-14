@@ -9,4 +9,5 @@ import java.util.concurrent.CompletableFuture
 interface OrderModificationService {
     fun createOrder(command: CreateOrderCommand): CompletableFuture<OrderId>
     fun updateStatus(command: UpdateStatusCommand): CompletableFuture<OrderId>
+    fun deleteOrder(command: DeleteOrderCommand): CompletableFuture<OrderId>
 }

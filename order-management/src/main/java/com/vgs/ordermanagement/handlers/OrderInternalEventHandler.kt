@@ -21,6 +21,5 @@ class OrderInternalEventHandler(
                 updatedAt = event.updatedAt,
             )
         )
-        catalogRepository.save(game)
     }
 }

@@ -1,0 +1,67 @@
+{
+  "consumer": {
+    "name": "catalog-service"
+  },
+  "provider": {
+    "name": "order-management"
+  },
+  "messages": [
+    {
+      "description": "OrderCreatedEvent when an order is created",
+      "metaData": {
+        "Content-Type": "application/json; charset\u003dUTF-8"
+      },
+      "contents": {
+        "videoGameId": {
+          "value": "VideoGame:550e8400-e29b-41d4-a716-446655440000"
+        }
+      },
+      "matchingRules": {
+        "body": {
+          "$.videoGameId.value": {
+            "matchers": [
+              {
+                "match": "regex",
+                "regex": "VideoGame:[0-9a-fA-F-]{36}"
+              }
+            ],
+            "combine": "AND"
+          }
+        }
+      }
+    },
+    {
+      "description": "OrderStatusUpdatedEvent when an order is cancelled",
+      "metaData": {
+        "Content-Type": "application/json; charset\u003dUTF-8"
+      },
+      "contents": {
+        "videoGameId": {
+          "value": "VideoGame:550e8400-e29b-41d4-a716-446655440000"
+        },
+        "status": "CANCELLED"
+      },
+      "matchingRules": {
+        "body": {
+          "$.videoGameId.value": {
+            "matchers": [
+              {
+                "match": "regex",
+                "regex": "VideoGame:[0-9a-fA-F-]{36}"
+              }
+            ],
+            "combine": "AND"
+          }
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "pactSpecification": {
+      "version": "3.0.0"
+    },
+    "pact-jvm": {
+      "version": "3.6.3"
+    }
+  }
+}

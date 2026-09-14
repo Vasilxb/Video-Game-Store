@@ -11,8 +11,7 @@ import java.time.ZonedDateTime
 data class CreateOrderCommand(
     val id: OrderId = OrderId(),
     val updatedAt: ZonedDateTime = ZonedDateTime.now(),
-    var amount: Money,
-    var status: OrderStatus,
+    var status: OrderStatus = OrderStatus.PROCESSING,
     var userId: UserId,
     var videoGameId: VideoGameId
 )

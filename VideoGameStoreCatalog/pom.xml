@@ -31,6 +31,7 @@
         <kotlin.version>2.2.0</kotlin.version>
         <lombok.version>1.18.46</lombok.version>
         <spring-cloud.version>2024.0.2</spring-cloud.version>
+        <spring-ai.version>1.0.9</spring-ai.version>
     </properties>
     <dependencies>
         <dependency>
@@ -147,6 +148,11 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-starter-mcp-server-webmvc</artifactId>
+        </dependency>
+
     </dependencies>
 
     <dependencyManagement>
@@ -155,6 +161,14 @@
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
                 <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.ai</groupId>
+                <artifactId>spring-ai-bom</artifactId>
+                <version>${spring-ai.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

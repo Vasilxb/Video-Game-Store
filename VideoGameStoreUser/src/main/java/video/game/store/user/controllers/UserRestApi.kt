@@ -11,14 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import video.game.store.user.model.DeleteUserAccountCommand
-import video.game.store.user.model.LoginUser2MFACommand
-import video.game.store.user.model.LoginUser2MFACommandDto
 import video.game.store.user.model.LoginUserCommand
 import video.game.store.user.model.LoginUserCommandDto
 import video.game.store.user.model.LogoutUserCommand
 import video.game.store.user.model.LogoutUserCommandDto
-import video.game.store.user.model.RegisterUser2MFACommand
-import video.game.store.user.model.RegisterUser2MFACommandDto
 import video.game.store.user.model.RegisterUserCommand
 import video.game.store.user.model.RegisterUserCommandDto
 import video.game.store.user.model.common.VideoGameStoreUserId
@@ -48,10 +44,6 @@ class UserRestApi(
             )
         )
 
-    @PostMapping("/register-2MFA")
-    fun register2MFA(@RequestBody dto: RegisterUser2MFACommandDto): ResponseEntity<Any> =
-        ResponseEntity.ok(commandGateway.send<Any>(RegisterUser2MFACommand(dto.videoGameStoreUserId)))
-
     @PostMapping("/login")
     fun login(@RequestBody dto: LoginUserCommandDto): ResponseEntity<Any> =
         ResponseEntity.ok(
@@ -63,10 +55,6 @@ class UserRestApi(
                 )
             )
         )
-
-    @PostMapping("/login-2MFA")
-    fun login2MFA(@RequestBody dto: LoginUser2MFACommandDto): ResponseEntity<Any> =
-        ResponseEntity.ok(commandGateway.send<Any>(LoginUser2MFACommand(dto.videoGameStoreUserId)))
 
     @PostMapping("/logout")
     fun logout(@RequestBody dto: LogoutUserCommandDto): ResponseEntity<Any> =

@@ -34,14 +34,6 @@ data class LoginUserCommandDto(
     val password: Password
 )
 
-data class RegisterUser2MFACommandDto(
-    val videoGameStoreUserId: VideoGameStoreUserId
-)
-
-data class LoginUser2MFACommandDto(
-    val videoGameStoreUserId: VideoGameStoreUserId
-)
-
 data class LogoutUserCommandDto(
     val videoGameStoreUserId: VideoGameStoreUserId
 )

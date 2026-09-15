@@ -20,21 +20,11 @@ data class RegisterUserCommand(
     var gender: Gender
 )
 
-data class RegisterUser2MFACommand(
-    @TargetAggregateIdentifier
-    var id: VideoGameStoreUserId
-)
-
 data class LoginUserCommand(
     @TargetAggregateIdentifier
     var id: VideoGameStoreUserId,
     var email: Email,
     var password: Password
-)
-
-data class LoginUser2MFACommand(
-    @TargetAggregateIdentifier
-    var id: VideoGameStoreUserId
 )
 
 data class LogoutUserCommand(

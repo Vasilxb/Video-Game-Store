@@ -23,9 +23,7 @@ import video.game.store.user.model.events.UserRegisteredEvent
 import video.game.store.user.model.events.UserProfileUpdatedEvent
 import video.game.store.user.model.events.RoleAssignedEvent
 import video.game.store.user.model.events.UserDeletedEvent
-import video.game.store.user.model.events.UserRegistered2MFAEvent
 import video.game.store.user.model.events.UserLoggedInEvent
-import video.game.store.user.model.events.UserLoggedIn2MFAEvent
 import video.game.store.user.model.events.UserLoggedOutEvent
 
 @Aggregate
@@ -41,7 +39,6 @@ class VideoGameStoreUser : LabeledEntity {
     private lateinit var age: Age
     private lateinit var gender: Gender
     private lateinit var role: Role
-    private var mfaVerified: Boolean = false
     private var loggedIn: Boolean = false
     private var deletedAccount: Boolean = false
     @Embedded
@@ -75,17 +72,6 @@ class VideoGameStoreUser : LabeledEntity {
     }
 
     @CommandHandler
-    fun register2MFA(command: RegisterUser2MFACommand) {
-        val event = UserRegistered2MFAEvent(command)
-        this.on(event)
-        AggregateLifecycle.apply(event)
-    }
-
-    fun on(event: UserRegistered2MFAEvent) {
-        this.mfaVerified = true
-    }
-
-    @CommandHandler
     fun login(command: LoginUserCommand) {
         val event = UserLoggedInEvent(command)
         this.on(event)
@@ -93,17 +79,6 @@ class VideoGameStoreUser : LabeledEntity {
     }
 
     fun on(event: UserLoggedInEvent) {
-        this.loggedIn = true
-    }
-
-    @CommandHandler
-    fun login2MFA(command: LoginUser2MFACommand) {
-        val event = UserLoggedIn2MFAEvent(command)
-        this.on(event)
-        AggregateLifecycle.apply(event)
-    }
-
-    fun on(event: UserLoggedIn2MFAEvent) {
         this.loggedIn = true
     }
 

@@ -135,8 +135,8 @@ services:
       SPRING_CLOUD_CONSUL_HOST: consul
       SPRING_CLOUD_CONSUL_PORT: 8500
 
-      KEYCLOAK_JWK_SET_URI: http://keycloak:8080/realms/finki-services/protocol/openid-connect/certs
-      KEYCLOAK_ISSUER_URI: http://localhost:8090/realms/finki-services
+      KEYCLOAK_JWK_SET_URI: http://keycloak:8080/realms/videogame-services/protocol/openid-connect/certs
+      KEYCLOAK_ISSUER_URI: http://localhost:8091/realms/videogame-services
 
     networks:
       - video_game_store_net
@@ -170,8 +170,8 @@ services:
       SPRING_CLOUD_CONSUL_HOST: consul
       SPRING_CLOUD_CONSUL_PORT: 8500
 
-      KEYCLOAK_JWK_SET_URI: http://keycloak:8080/realms/finki-services/protocol/openid-connect/certs
-      KEYCLOAK_ISSUER_URI: http://localhost:8090/realms/finki-services
+      KEYCLOAK_JWK_SET_URI: http://keycloak:8080/realms/videogame-services/protocol/openid-connect/certs
+      KEYCLOAK_ISSUER_URI: http://localhost:8091/realms/videogame-services
 
     networks:
       - video_game_store_net
@@ -205,8 +205,8 @@ services:
       SPRING_CLOUD_CONSUL_HOST: consul
       SPRING_CLOUD_CONSUL_PORT: 8500
 
-      KEYCLOAK_JWK_SET_URI: http://keycloak:8080/realms/finki-services/protocol/openid-connect/certs
-      KEYCLOAK_ISSUER_URI: http://localhost:8090/realms/finki-services
+      KEYCLOAK_JWK_SET_URI: http://keycloak:8080/realms/videogame-services/protocol/openid-connect/certs
+      KEYCLOAK_ISSUER_URI: http://localhost:8091/realms/videogame-services
 
     networks:
       - video_game_store_net

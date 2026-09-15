@@ -3,10 +3,8 @@ package video.game.store.user.model.events
 import com.fasterxml.jackson.annotation.JsonIgnore
 import video.game.store.user.model.AssignRoleCommand
 import video.game.store.user.model.DeleteUserAccountCommand
-import video.game.store.user.model.LoginUser2MFACommand
 import video.game.store.user.model.LoginUserCommand
 import video.game.store.user.model.LogoutUserCommand
-import video.game.store.user.model.RegisterUser2MFACommand
 import video.game.store.user.model.RegisterUserCommand
 import video.game.store.user.model.UpdateUserAccountCommand
 import video.game.store.user.model.common.Age
@@ -46,14 +44,6 @@ data class UserRegisteredEvent(
     )
 }
 
-data class UserRegistered2MFAEvent(
-    var videoGameStoreUserId: VideoGameStoreUserId
-){
-    constructor(command: RegisterUser2MFACommand): this(
-        videoGameStoreUserId =  command.id
-    )
-}
-
 data class UserLoggedInEvent(
     var videoGameStoreUserId: VideoGameStoreUserId,
     var email: Email,
@@ -63,14 +53,6 @@ data class UserLoggedInEvent(
         videoGameStoreUserId = command.id,
         email = command.email,
         password = command.password
-    )
-}
-
-data class UserLoggedIn2MFAEvent(
-    var videoGameStoreUserId: VideoGameStoreUserId
-){
-    constructor(command: LoginUser2MFACommand): this(
-        videoGameStoreUserId = command.id
     )
 }
 

@@ -10,14 +10,11 @@ import video.game.store.user.model.UpdateUserAccountCommand
 import video.game.store.user.model.AssignRoleCommand
 import video.game.store.user.model.AssignRoleCommandDto
 import video.game.store.user.model.LoginUserCommand
-import video.game.store.user.model.RegisterUser2MFACommand
-import video.game.store.user.model.LoginUser2MFACommand
 import video.game.store.user.model.LogoutUserCommand
 import video.game.store.user.model.DeleteUserAccountCommand
-import video.game.store.user.model.LoginUser2MFACommandDto
+import video.game.store.user.model.DeleteUserAccountCommandDto
 import video.game.store.user.model.LoginUserCommandDto
 import video.game.store.user.model.LogoutUserCommandDto
-import video.game.store.user.model.RegisterUser2MFACommandDto
 import video.game.store.user.model.RegisterUserCommandDto
 import video.game.store.user.model.UpdateUserAccountCommandDto
 import video.game.store.user.model.common.VideoGameStoreUserId
@@ -73,26 +70,6 @@ class UserCommandDispatcher(
             )
         )
 
-    @PostMapping("/RegisterUser2MFACommand")
-    fun register2MFA(@RequestBody dto: RegisterUser2MFACommandDto): ResponseEntity<Any> =
-        ResponseEntity.ok(
-            userModificationService.registerUser2MFA(
-                RegisterUser2MFACommand(
-                    id = dto.videoGameStoreUserId
-                )
-            )
-        )
-
-    @PostMapping("/LoginUser2MFACommand")
-    fun login2MFA(@RequestBody dto: LoginUser2MFACommandDto): ResponseEntity<Any> =
-        ResponseEntity.ok(
-            userModificationService.loginUser2MFA(
-                LoginUser2MFACommand(
-                    id = dto.videoGameStoreUserId
-                )
-            )
-        )
-
     @PostMapping("/LogoutUserCommand")
     fun logoutUser(@RequestBody dto: LogoutUserCommandDto): ResponseEntity<Any> =
         ResponseEntity.ok(
@@ -102,7 +79,7 @@ class UserCommandDispatcher(
         )
 
     @PostMapping("/DeleteUserAccountCommand")
-    fun deleteUserAccount(@RequestBody dto: LogoutUserCommandDto): ResponseEntity<Any> =
+    fun deleteUserAccount(@RequestBody dto: DeleteUserAccountCommandDto): ResponseEntity<Any> =
         ResponseEntity.ok(
             userModificationService.deleteUserAccount(
                 DeleteUserAccountCommand(dto.videoGameStoreUserId)

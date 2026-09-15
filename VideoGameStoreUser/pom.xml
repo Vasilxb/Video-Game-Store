@@ -22,8 +22,8 @@
         <kotlin.version>2.2.0</kotlin.version>
         <spring-cloud.version>2025.0.0</spring-cloud.version>
         <spring-ai.version>1.0.9</spring-ai.version>
+        <pact.version>4.6.17</pact.version>
     </properties>
-
 
     <dependencies>
 
@@ -38,7 +38,6 @@
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
-
         <!-- Database -->
         <dependency>
             <groupId>com.h2database</groupId>
@@ -52,7 +51,6 @@
             <scope>runtime</scope>
         </dependency>
 
-
         <!-- Axon CQRS -->
         <dependency>
             <groupId>org.axonframework</groupId>
@@ -60,20 +58,17 @@
             <version>4.9.3</version>
         </dependency>
 
-
         <!-- Kafka -->
         <dependency>
             <groupId>org.springframework.kafka</groupId>
             <artifactId>spring-kafka</artifactId>
         </dependency>
 
-
         <!-- Quartz -->
         <dependency>
             <groupId>org.quartz-scheduler</groupId>
             <artifactId>quartz</artifactId>
         </dependency>
-
 
         <!-- Jackson -->
         <dependency>
@@ -85,7 +80,6 @@
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
         </dependency>
-
 
         <!-- Kotlin -->
         <dependency>
@@ -99,14 +93,12 @@
             <version>${kotlin.version}</version>
         </dependency>
 
-
         <!-- Lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
-
 
         <!-- Tests -->
         <dependency>
@@ -115,7 +107,6 @@
             <scope>test</scope>
         </dependency>
 
-
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-test</artifactId>
@@ -123,6 +114,7 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- OpenAPI -->
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
@@ -135,17 +127,19 @@
             <artifactId>spring-cloud-starter-consul-discovery</artifactId>
         </dependency>
 
-        <!-- Actuator (for health endpoint) -->
+        <!-- Actuator -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
+        <!-- Spring AI MCP -->
         <dependency>
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-starter-mcp-server-webmvc</artifactId>
         </dependency>
 
+        <!-- Security -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
@@ -156,10 +150,26 @@
             <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
         </dependency>
 
+        <!-- Pact Provider JUnit 5 -->
+        <dependency>
+            <groupId>au.com.dius.pact.provider</groupId>
+            <artifactId>junit5</artifactId>
+            <version>${pact.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>au.com.dius</groupId>
+            <artifactId>pact-jvm-consumer-junit5_2.12</artifactId>
+            <version>3.6.15</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <dependencyManagement>
         <dependencies>
+
+            <!-- Spring Cloud -->
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
@@ -167,6 +177,8 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
+            <!-- Spring AI -->
             <dependency>
                 <groupId>org.springframework.ai</groupId>
                 <artifactId>spring-ai-bom</artifactId>
@@ -174,9 +186,9 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
         </dependencies>
     </dependencyManagement>
-
 
     <build>
 
@@ -189,7 +201,6 @@
                 <version>${kotlin.version}</version>
 
                 <configuration>
-
                     <jvmTarget>21</jvmTarget>
 
                     <args>
@@ -201,7 +212,6 @@
                         <plugin>jpa</plugin>
                         <plugin>lombok</plugin>
                     </compilerPlugins>
-
                 </configuration>
 
                 <dependencies>
@@ -217,6 +227,7 @@
                         <artifactId>kotlin-maven-noarg</artifactId>
                         <version>${kotlin.version}</version>
                     </dependency>
+
                     <dependency>
                         <groupId>org.jetbrains.kotlin</groupId>
                         <artifactId>kotlin-maven-lombok</artifactId>
@@ -224,16 +235,13 @@
                     </dependency>
 
                 </dependencies>
-
             </plugin>
-
 
             <!-- Spring Boot -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-
 
         </plugins>
 

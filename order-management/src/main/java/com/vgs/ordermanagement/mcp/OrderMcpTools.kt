@@ -27,7 +27,7 @@ class OrderMcpTools(
         return orderModificationService.createOrder(
             CreateOrderCommand(
                 videoGameId = request.videoGameId,
-                userId = UserId() // TODO: resolve from MCP auth context
+                userId = UserId()
             )
         ).get()
     }
@@ -47,7 +47,7 @@ class OrderMcpTools(
         description = "Find all orders for the currently authenticated user"
     )
     fun findAllOrdersForUser(): List<OrderView> {
-        return orderViewReadService.findAllByUserId(UserId()) // TODO: resolve from MCP auth context
+        return orderViewReadService.findAllByUserId(UserId())
     }
 
     @Tool(

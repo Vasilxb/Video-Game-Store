@@ -11,8 +11,11 @@ import org.springframework.security.web.SecurityFilterChain
 
 @Configuration
 class SecurityConfig(
-    @Value("\${spring.security.oauth2.resourceserver.jwt.jwk-set-uri}") private val jwkSetUri: String,
-    @Value("\${spring.security.oauth2.resourceserver.jwt.issuer-uri}") private val issuerUri: String,
+    @Value("\${spring.security.oauth2.resourceserver.jwt.jwk-set-uri}")
+    private val jwkSetUri: String,
+
+    @Value("\${spring.security.oauth2.resourceserver.jwt.issuer-uri}")
+    private val issuerUri: String
 ) {
 
     @Bean
@@ -20,18 +23,44 @@ class SecurityConfig(
         http
             .csrf { it.disable() }
             .authorizeHttpRequests { auth ->
-                auth.requestMatchers("/actuator/**", "/h2/**", "/v3/api-docs/**", "/swagger-ui/**", "/springwolf/**").permitAll()
+                auth
+                    .requestMatchers(
+                        "/actuator/**",
+                        "/h2/**",
+                        "/v3/api-docs/**",
+                        "/swagger-ui/**",
+                        "/swagger-ui.html",
+                        "/springwolf/**",
+                        "/mcp/**"
+                    ).permitAll()
+
+                    .requestMatchers("/submitCommand/**").authenticated()
+                    .requestMatchers("/api/orders/**").authenticated()
+
                     .anyRequest().authenticated()
             }
-            .headers { it.frameOptions { f -> f.disable() } }
-            .oauth2ResourceServer { it.jwt { } }
+            .headers { headers ->
+                headers.frameOptions { frameOptions ->
+                    frameOptions.disable()
+                }
+            }
+            .oauth2ResourceServer { oauth2 ->
+                oauth2.jwt { }
+            }
+
         return http.build()
     }
 
     @Bean
     fun jwtDecoder(): JwtDecoder {
-        val decoder = NimbusJwtDecoder.withJwkSetUri(jwkSetUri).build()
-        decoder.setJwtValidator(JwtValidators.createDefaultWithIssuer(issuerUri))
+        val decoder = NimbusJwtDecoder
+            .withJwkSetUri(jwkSetUri)
+            .build()
+
+        decoder.setJwtValidator(
+            JwtValidators.createDefaultWithIssuer(issuerUri)
+        )
+
         return decoder
     }
 }

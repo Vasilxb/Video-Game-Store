@@ -75,7 +75,6 @@ services:
 
     networks:
       - video_game_store_net
-      - shared_net
 
 
   video_game_store_db:
@@ -140,7 +139,6 @@ services:
 
     networks:
       - video_game_store_net
-      - shared_net
 
 
   user_app:
@@ -175,7 +173,6 @@ services:
 
     networks:
       - video_game_store_net
-      - shared_net
 
 
   order_app:
@@ -210,7 +207,6 @@ services:
 
     networks:
       - video_game_store_net
-      - shared_net
 
 
 volumes:
@@ -222,7 +218,3 @@ networks:
   video_game_store_net:
     name: video_game_store_net
     driver: bridge
-
-  shared_net:
-    name: shared_net
-    external: true

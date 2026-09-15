@@ -27,7 +27,7 @@ class OrderCommandDispatcher (
                 .createOrder(
                     CreateOrderCommand(
                         videoGameId = commandDto.videoGameId,
-                        userId = UserId()
+                        userId = commandDto.userId
                     )
                 ).get()
         )
